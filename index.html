@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,400;0,700;1,200;1,800&display=swap"
+        rel="stylesheet">
+
+
+    <script src="main.js" defer></script>
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/main.css">
+
+    <title>To-Do List</title>
+</head>
+
+<body>
+    <header>
+        <h1 class="cabecalho">To-Do List</h1>
+    </header>
+    <main>
+        <div class="tarefas-cabecalho"><button type="button" class="button" id="novaTarefa">+</button></div>
+        <ul id="todoList" class="registros">
+        </ul>
+        <div class="modal" id="modal">
+            <div class="modal-conteudo">
+                <header class="modal-cabecalho">
+                    <h2>Novo Cliente</h2>
+                    <span class="modal-x" id="modalX">&#10006;</span>
+                </header>
+                <form id="form" class="modal-form">
+                    <input type="text" id="nome" data-index="new" class="modal-campo" placeholder="Tarefa"
+                        required>
+                    <input type="date" id="data" class="modal-campo" placeholder="Data" required>
+                </form>
+                <footer class="modal-rodape">
+                    <button id="salvar" class="button">Salvar</button>
+                    <button id="cancelar" class="button">Cancelar</button>
+                </footer>
+            </div>
+        </div>
+    </main>
+    <footer>
+        Copyright &copy; Prof. Fernando Leonid
+    </footer>
+
+</body>
+
+</html>
