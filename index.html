@@ -9,6 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20,600,0,0" />
 
     <script src="main.js" defer></script>
     <link rel="stylesheet" href="css/reset.css">
@@ -19,7 +20,7 @@
 
 <body>
     <header>
-        <h1>To-Do List</h1>
+        <h1>TO DO LIST</h1>
     </header>
     <main>
         <div class="tarefas-cabecalho">
@@ -37,7 +38,11 @@
                 <form id="form" class="modal-form">
                     <input type="text" id="nome" data-index="new" class="modal-campo" placeholder="Tarefa" required>
                     <input type="date" id="data" class="modal-campo" placeholder="Data" required>
-                </form>
+                    <div class="modal-prioritaria">
+                        <input type="checkbox" id="prioritaria" class="modal-checkbox checkbox">
+                        <label for="prioritaria" class="label-prioritaria">Tarefa prioritária</label>
+                    </div>
+                    </form>
                 <footer class="modal-rodape">
                     <button id="salvar" class="button modal-button">A D D</button>
                 </footer>
@@ -45,7 +50,9 @@
         </div>
     </main>
     <footer>
-        Copyright &copy; Prof. Fernando Leonid
+        <p1>Projeto educacional desenvolvido por Luana Santini para a disciplina de Desenvolvimento Web, do curso Sistemas de Informação - Estácio Florianópolis.<br>
+        O projeto não possui qualquer finalidade comercial, servindo exclusivamente como material educacional e para portfólio.<br>
+        CRUD - Copyright &copy; Prof. Fernando Leonid.</p1>
     </footer>
 
 </body>

@@ -33,11 +33,29 @@ const criaTarefa = (client) => {
     setLocalStorage(dbClient)
 }
 
+//Interação com o layout
+
 const campoEhValido = () => {
     return document.getElementById('form').reportValidity()
 }
 
-//Interação com o layout
+const validaData = (dataString) => {
+    const regexDate = /^\d{4}-\d{2}-\d{2}$/; // Adapte a expressão regular conforme necessário
+
+    if (!regexDate.test(dataString)) {
+        alert('Formato de data inválido. Utilize o formato AAAA-MM-DD.');
+        return false;
+    }
+
+    const data = new Date(dataString);
+    if (isNaN(data.getTime())) {
+        alert('Data inválida. Verifique o dia, mês e ano inseridos.');
+        return false;
+    }
+
+    return true;
+
+};
 
 const limpaCampos = () => {
     const fields = document.querySelectorAll('.modal-campo')
@@ -48,31 +66,43 @@ const limpaCampos = () => {
 
 const salvaTarefa = () => {
     if (campoEhValido()) {
-        const task = {
-            nome: document.getElementById('nome').value,
-            data: document.getElementById('data').value
-        };
+        const nomeTarefa = document.getElementById('nome').value;
+        const dataTarefa = document.getElementById('data').value;
 
-        const index = document.getElementById('nome').dataset.index;
+        if (validaData(dataTarefa)) {
+            const task = {
+                nome: nomeTarefa,
+                data: dataTarefa,
+                prioritaria: document.getElementById('prioritaria').checked,
+            };
 
-        if (index === 'new') {
-            criaTarefa(task); // Criar uma nova tarefa
-        } else {
-            atualizaTarefa(index, task); // Atualizar tarefa existente
+            const index = document.getElementById('nome').dataset.index;
+
+            if (index === 'new') {
+                criaTarefa(task); // Criar uma nova tarefa
+            } else {
+                atualizaTarefa(index, task); // Atualizar tarefa existente
+            }
+
+            atualizaLista();
+            fechaModal();
         }
-
-        atualizaLista();
-        fechaModal();
     }
 };
 
-const criaTarefaNova = (task, index) => {
+const criaTarefaNova = (tarefa, index) => {
     const newListElement = document.createElement('li');
-    const isCompleted = task.realizada ? 'completed' : '';
+    const isCompleted = tarefa.realizada ? 'tarefa-realizada' : '';
+    const dataFormatada = new Date(tarefa.data).toLocaleDateString('pt-BR');
+
     newListElement.innerHTML = `
         <div class="div1">
-            <input type="checkbox" class="checkbox" data-index="${index}" id="check-${index}" ${task.realizada ? 'checked' : ''}>
-            <h3 class="tarefa-nome${isCompleted}">${task.nome}</h3>
+            <input type="checkbox" class="checkbox" data-index="${index}" id="check-${index}" ${tarefa.realizada ? 'checked' : ''}>
+            ${tarefa.prioritaria ? `<span class="material-symbols-rounded">flag</span>` : ''}
+            <div class="div2">
+                <h3 class="tarefa-nome">${tarefa.nome}</h3>
+                <p class="tarefa-data">${dataFormatada}</p>
+            </div>
         </div>
         <div class="icones">
             <img src="/assets/icone-lapis.svg" class="icone" data-index="${index}" id="edit-${index}">
@@ -82,10 +112,17 @@ const criaTarefaNova = (task, index) => {
 
     newListElement.classList.add('tarefa');
 
+    if (tarefa.realizada) {
+        newListElement.classList.add('tarefa-realizada');
+    }
+
+    if (tarefa.prioritaria) {
+        newListElement.classList.add('tarefa-prioritaria');
+    }
+
     document.getElementById('todoList').appendChild(newListElement);
     document.getElementById(`edit-${index}`).addEventListener('click', () => editaTarefa(index));
 };
-
 
 
 const limpaLista = () => {
@@ -96,9 +133,23 @@ const limpaLista = () => {
 };
 
 const atualizaLista = () => {
-    const task = leTarefa();
+    const tarefas = leTarefa();
     limpaLista();
-    task.forEach(criaTarefaNova);
+
+    const tarefasIncompletas = tarefas.filter(tarefa => !tarefa.realizada);
+    const tarefasCompletas = tarefas.filter(tarefa => tarefa.realizada);
+
+    tarefas.forEach((tarefa, index) => {
+        if (!tarefa.realizada) {
+            criaTarefaNova(tarefa, index);
+        }
+    });
+
+    tarefas.forEach((tarefa, index) => {
+        if (tarefa.realizada) {
+            criaTarefaNova(tarefa, index);
+        }
+    });
 };
 
 
