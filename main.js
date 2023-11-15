@@ -29,7 +29,7 @@ const leTarefa = () => getLocalStorage()
 
 const criaTarefa = (client) => {
     const dbClient = getLocalStorage()
-    dbClient.push (client)
+    dbClient.push(client)
     setLocalStorage(dbClient)
 }
 
@@ -43,7 +43,7 @@ const limpaCampos = () => {
     const fields = document.querySelectorAll('.modal-campo')
     fields.forEach(field => field.value = "")
     document.getElementById('nome').dataset.index = 'new'
-    document.querySelector(".modal-cabecalho>h2").textContent  = 'Nova Tarefa'
+    document.querySelector(".modal-cabecalho>h2").textContent = 'Nova Tarefa'
 }
 
 const salvaTarefa = () => {
@@ -69,14 +69,17 @@ const salvaTarefa = () => {
 const criaTarefaNova = (task, index) => {
     const newListElement = document.createElement('li');
     newListElement.innerHTML = `
-        <span>${task.nome}</span>
-        <div>
-            <button type="button" class="button" data-index="${index}" id="edit-${index}">Editar</button>
-            <button type="button" class="button" id="delete-${index}" >Excluir</button>
+        <div class="div1">
+            <input type="checkbox" class="checkbox" data-index="${index}" id="check-${index}">
+            <h3 class="tarefa-nome">${task.nome}</h3>
+        </div>
+        <div class="icones">
+            <img src="/assets/icone-lapis.svg" class="icone" data-index="${index}" id="edit-${index}">
+            <img src="/assets/icone-lixeira.svg" class="icone" data-index="${index}" id="delete-${index}">
         </div>
     `;
 
-    newListElement.classList.add('registro');
+    newListElement.classList.add('tarefa');
 
     document.getElementById('todoList').appendChild(newListElement);
 
@@ -109,7 +112,7 @@ const editaTarefa = (index) => {
     const client = leTarefa()[index];
     preencheCampos(client);
     document.getElementById('nome').dataset.index = index; // Atualizar o dataset.index
-    document.querySelector(".modal-cabecalho>h2").textContent = `Editando ${client.nome}`;
+    document.querySelector(".modal-cabecalho>h2").textContent = `Editando "${client.nome}"`;
     abreModal();
 };
 
@@ -122,7 +125,7 @@ const editaDeleta = (event) => {
             editaTarefa(index)
         } else {
             const client = leTarefa()[index]
-            const resposta = confirm(`Deseja realmente excluir a tarefa ${client && client.nome}`);
+            const resposta = confirm(`Deseja realmente excluir a tarefa ${client && client.nome}?`);
             if (resposta) {
                 deletaTarefa(index)
                 atualizaLista()
@@ -144,7 +147,4 @@ document.getElementById('salvar')
     .addEventListener('click', salvaTarefa)
 
 document.getElementById('todoList')
-.addEventListener('click', editaDeleta);
-
-document.getElementById('cancelar')
-    .addEventListener('click', fechaModal)
+    .addEventListener('click', editaDeleta);
