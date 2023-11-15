@@ -68,10 +68,11 @@ const salvaTarefa = () => {
 
 const criaTarefaNova = (task, index) => {
     const newListElement = document.createElement('li');
+    const isCompleted = task.realizada ? 'completed' : '';
     newListElement.innerHTML = `
         <div class="div1">
-            <input type="checkbox" class="checkbox" data-index="${index}" id="check-${index}">
-            <h3 class="tarefa-nome">${task.nome}</h3>
+            <input type="checkbox" class="checkbox" data-index="${index}" id="check-${index}" ${task.realizada ? 'checked' : ''}>
+            <h3 class="tarefa-nome${isCompleted}">${task.nome}</h3>
         </div>
         <div class="icones">
             <img src="/assets/icone-lapis.svg" class="icone" data-index="${index}" id="edit-${index}">
@@ -82,8 +83,6 @@ const criaTarefaNova = (task, index) => {
     newListElement.classList.add('tarefa');
 
     document.getElementById('todoList').appendChild(newListElement);
-
-    // Adicione eventos de clique aos botões de editar e excluir
     document.getElementById(`edit-${index}`).addEventListener('click', () => editaTarefa(index));
 };
 
@@ -117,22 +116,33 @@ const editaTarefa = (index) => {
 };
 
 const editaDeleta = (event) => {
-    if (event.target.type == 'button') {
+    const target = event.target;
+    if (target.classList.contains('icone')) {
+        const [action, index] = target.id.split('-');
 
-        const [action, index] = event.target.id.split('-')
-
-        if (action == 'edit') {
-            editaTarefa(index)
-        } else {
-            const client = leTarefa()[index]
-            const resposta = confirm(`Deseja realmente excluir a tarefa ${client && client.nome}?`);
+        if (action === 'edit') {
+            editaTarefa(index);
+        } else if (action === 'delete') {
+            const client = leTarefa()[index];
+            const resposta = confirm(`Deseja realmente excluir a tarefa "${client && client.nome}"?`);
             if (resposta) {
-                deletaTarefa(index)
-                atualizaLista()
+                deletaTarefa(index);
+                atualizaLista();
             }
         }
     }
-}
+};
+
+
+const checkTarefa = (event) => {
+    if (event.target.classList.contains('checkbox')) {
+        const index = event.target.dataset.index;
+        const taskList = leTarefa();
+        taskList[index].realizada = event.target.checked;
+        atualizaTarefa(index, taskList[index]);
+        atualizaLista();
+    }
+};
 
 atualizaLista()
 
@@ -148,3 +158,6 @@ document.getElementById('salvar')
 
 document.getElementById('todoList')
     .addEventListener('click', editaDeleta);
+
+document.getElementById('todoList')
+    .addEventListener('click', checkTarefa);
